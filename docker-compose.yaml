@@ -1,67 +1,87 @@
-version: "2.1"
 services:
-  radarr:
-    image: lscr.io/linuxserver/radarr:latest
-    container_name: radarr
+  # --- VPN (Le tunnel sécurisé) ---
+  vpn:
+    image: qmcgaw/gluetun
+    container_name: vpn
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Etc/UTC
+      - VPN_SERVICE_PROVIDER=custom
+      - VPN_TYPE=openvpn
+      - OPENVPN_USER=A4DhMJcDg
+      - OPENVPN_PASSWORD=01KMEC606GGD9Y16CYRRAS7XDQ
+      - TZ=Europe/Paris
+      - OPENVPN_CUSTOM_CONFIG=/gluetun/client.conf
+      - DOT=off
     volumes:
-      - /Users/tristanschwenk/Documents/Code/docker-streaming-manager/radarr/config:/config
-      - /Users/tristanschwenk/Documents/Code/docker-streaming-manager/content/movies:/movies #optional
-      - /Users/tristanschwenk/Documents/Code/docker-streaming-manager/content/downloads:/downloads #optional
+      - ./docker-config/vpn:/gluetun
     ports:
-      - 7878:7878
-    restart: unless-stopped
-  jackett:
-    image: lscr.io/linuxserver/jackett:latest
-    container_name: jackett
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Etc/UTC
-      - AUTO_UPDATE=true #optional
-      - RUN_OPTS= #optional
-    volumes:
-      - /Users/tristanschwenk/Documents/Code/docker-streaming-manager/jacket/config:/config
-      - /Users/tristanschwenk/Documents/Code/docker-streaming-manager/content/downloads:/downloads
-    ports:
-      - 9117:9117
-    restart: unless-stopped
+      - 9091:9091 # Transmission Web UI
+      - 8989:8989 # Sonarr
+      - 7878:7878 # Radarr
+      - 9696:9696 # Prowlarr
+    restart: always
+
+  # --- DOWNLOADER (Derrière le VPN) ---
   transmission:
     image: lscr.io/linuxserver/transmission:latest
     container_name: transmission
+    network_mode: "container:vpn"
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Etc/UTC
-      - TRANSMISSION_WEB_HOME= #optional
-      - USER= #optional
-      - PASS= #optional
-      - WHITELIST= #optional
-      - PEERPORT= #optional
-      - HOST_WHITELIST= #optional
+      - TZ=Europe/Paris
     volumes:
-      - ./transmission/data:/config
-      - /Users/tristanschwenk/Documents/Code/docker-streaming-manager/content/downloads:/downloads
-      - ./transmission/folder:/watch
-    ports:
-      - 9091:9091
-      - 51413:51413
-      - 51413:51413/udp
-    restart: unless-stopped
-  # sonarr:
-  # image: lscr.io/linuxserver/sonarr:latest
-  # container_name: sonarr
-  # environment:
-  #   - PUID=0
-  #   - PGID=0
-  #   - TZ=Etc/UTC
-  # volumes:
-  #   - /Users/tristanschwenk/Documents/Code/sonarr/config
-  #   - /Users/tristanschwenk/Documents/Code/sonarr/tv #optional
-  #   - /Users/tristanschwenk/Documents/Code/sonarr/downloads #optional
-  # ports:
-  #   - 8989:8989
-  # restart: unless-stopped
+      - ./docker-config/transmission:/config
+      - ./data:/data
+    depends_on:
+      - vpn
+    restart: always
+
+  # --- INDEXEURS ---
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:develop
+    container_name: prowlarr
+    network_mode: "container:vpn"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+    volumes:
+      - ./docker-config/prowlarr:/config
+    depends_on:
+      - vpn
+    restart: always
+
+  # --- GESTIONNAIRES ---
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    network_mode: "container:vpn"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+    volumes:
+      - ./docker-config/radarr:/config
+      - ./data:/data
+    depends_on:
+      - vpn
+    restart: always
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    network_mode: "container:vpn"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+    volumes:
+      - ./docker-config/sonarr:/config
+      - ./data:/data
+    depends_on:
+      - vpn
+    restart: always
