@@ -131,6 +131,7 @@ services:
       - POSTGRES_PORT=5432
       - POSTGRES_DB=jellystat
       - TZ=Europe/Paris
+      - JWT_SECRET=dlkfjgblksjnclkjfdgndflkjgndflkjfnlkzgnerlkjgndkjn
     depends_on:
       - postgres
     restart: always
