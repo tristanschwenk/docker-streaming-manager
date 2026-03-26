@@ -79,6 +79,7 @@ All management interfaces are accessible via your server's local IP (e.g., 192.1
 | **Radarr**       | http://<IP>:7878 | Link to Transmission via localhost:9091 |
 | **Sonarr**       | http://<IP>:8989 | Link to Transmission via localhost:9091 |
 | **Jellyfin**     | http://<IP>:8096 | Point libraries to /data/media          |
+| **Jellystat**    | http://<IP>:3001 | Get stats about your media              |
 
 ## 🔧 Internal Communication
 
