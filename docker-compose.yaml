@@ -135,3 +135,14 @@ services:
     depends_on:
       - postgres
     restart: always
+  overseerr:
+    image: sgeto/overseerr:latest
+    container_name: overseerr
+    environment:
+      - LOG_LEVEL=debug
+      - TZ=Europe/Paris
+    ports:
+      - 5055:5055
+    volumes:
+      - ./docker-config/overseerr:/app/config
+    restart: always
