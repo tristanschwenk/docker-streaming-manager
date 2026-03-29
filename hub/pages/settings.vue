@@ -2,10 +2,38 @@
   <div class="settings-page">
     <header class="page-header">
       <h1 class="page-title">Settings</h1>
-      <p class="page-description">Enable or disable services and configure their URLs. Changes are saved automatically.</p>
+      <p class="page-description">Configure your hub and connected services. Changes are saved automatically.</p>
     </header>
 
     <div role="list">
+      <!-- Theme Setting -->
+      <div class="module-card" role="listitem">
+        <div class="module-info">
+          <div class="module-icon-wrap" aria-hidden="true">
+            <AppIcon :name="colorMode === 'dark' ? 'sun' : 'moon'" :size="20" />
+          </div>
+          <div class="module-details">
+            <div class="module-name">Appearance</div>
+            <div class="page-description" style="margin: 0; font-size: 0.8125rem;">
+              Currently using <strong>{{ colorMode === 'dark' ? 'Dark' : 'Light' }}</strong> mode
+            </div>
+          </div>
+        </div>
+        <div class="module-actions">
+          <label class="toggle-label" aria-label="Toggle theme">
+            <input
+              type="checkbox"
+              :checked="colorMode === 'dark'"
+              @change="toggleTheme"
+            />
+            <span class="toggle-track" aria-hidden="true"></span>
+            <span class="toggle-thumb" aria-hidden="true"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="nav-section-label" style="padding-left: 0; margin-top: 1.5rem; margin-bottom: 0.75rem;">Connected Services</div>
+
       <div
         v-for="mod in modules"
         :key="mod.id"
@@ -49,4 +77,9 @@
 
 <script setup>
 const { modules, updateModule } = useModules()
+const colorMode = useColorMode()
+
+const toggleTheme = () => {
+  colorMode.value = colorMode.value === 'dark' ? 'light' : 'dark'
+}
 </script>
