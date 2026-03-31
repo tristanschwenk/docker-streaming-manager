@@ -15,8 +15,8 @@ FROM nginx:alpine
 # Copy generate output to nginx public directory
 COPY --from=builder /app/.output/public /usr/share/nginx/html
 
-# Copy custom nginx config if needed (optional)
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy custom nginx config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 
