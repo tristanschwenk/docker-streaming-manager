@@ -1,6 +1,7 @@
 {
   "name": "casastreaming-hub",
   "version": "1.0.0",
+  "license": "UNLICENSED",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",

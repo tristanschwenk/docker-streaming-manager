@@ -1,3 +1,18 @@
+<script setup>
+const { modules, serverAddress, updateModule, updateServerAddress } = useModules()
+const colorMode = useColorMode()
+
+const serverAddressInput = ref(serverAddress.value)
+
+const toggleTheme = () => {
+  colorMode.value = colorMode.value === 'dark' ? 'light' : 'dark'
+}
+
+const handleServerAddressChange = () => {
+  updateServerAddress(serverAddressInput.value)
+}
+</script>
+
 <template>
   <div class="settings-page">
     <header class="page-header">
@@ -29,6 +44,29 @@
             <span class="toggle-track" aria-hidden="true"></span>
             <span class="toggle-thumb" aria-hidden="true"></span>
           </label>
+        </div>
+      </div>
+
+      <!-- Server Address Setting -->
+      <div class="module-card" role="listitem" style="margin-top: 1rem;">
+        <div class="module-info">
+          <div class="module-icon-wrap" aria-hidden="true">
+            <AppIcon name="settings" :size="20" />
+          </div>
+          <div class="module-details" style="flex: 1;">
+            <div class="module-name">Global Server Address</div>
+            <div class="page-description" style="margin: 0 0 0.5rem 0; font-size: 0.75rem; opacity: 0.7;">
+              Updating this will prefill all service URLs below.
+            </div>
+            <input
+              type="text"
+              v-model="serverAddressInput"
+              class="url-input"
+              placeholder="http://192.168.1.100"
+              @change="handleServerAddressChange"
+              style="width: 100%;"
+            />
+          </div>
         </div>
       </div>
 
@@ -74,12 +112,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-const { modules, updateModule } = useModules()
-const colorMode = useColorMode()
-
-const toggleTheme = () => {
-  colorMode.value = colorMode.value === 'dark' ? 'light' : 'dark'
-}
-</script>
