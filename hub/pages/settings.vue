@@ -85,15 +85,43 @@ const handleServerAddressChange = () => {
           </div>
 
           <div class="module-details">
-            <div class="module-name">{{ mod.name }}</div>
-            <input
-              type="url"
-              v-model="mod.url"
-              class="url-input"
-              :placeholder="`http://localhost:PORT`"
-              :aria-label="`${mod.name} URL`"
-              @change="updateModule(mod.id, { url: mod.url })"
-            />
+            <div class="module-header-row">
+              <div class="module-name">{{ mod.name }}</div>
+              <button
+                class="btn-override"
+                :class="{ 'is-active': mod.useCustomUrl }"
+                @click="updateModule(mod.id, { useCustomUrl: !mod.useCustomUrl })"
+                :title="mod.useCustomUrl ? 'Back to global config' : 'Override with custom URL'"
+              >
+                <AppIcon :name="mod.useCustomUrl ? 'settings' : 'settings'" :size="14" />
+                <span>{{ mod.useCustomUrl ? 'Custom' : 'Global' }}</span>
+              </button>
+            </div>
+
+            <!-- Global Port Config -->
+            <div v-if="!mod.useCustomUrl" class="url-input-wrapper">
+              <span class="url-input-prefix">{{ serverAddress }}:</span>
+              <input
+                type="number"
+                v-model.number="mod.port"
+                class="url-input port-input"
+                placeholder="PORT"
+                :aria-label="`${mod.name} Port`"
+                @change="updateModule(mod.id, { port: mod.port })"
+              />
+            </div>
+
+            <!-- Custom URL Override -->
+            <div v-else class="url-input-wrapper">
+              <input
+                type="url"
+                v-model="mod.customUrl"
+                class="url-input"
+                placeholder="https://custom-address.com:port"
+                @change="updateModule(mod.id, { customUrl: mod.customUrl })"
+                style="padding: 0.4375rem 0.75rem;"
+              />
+            </div>
           </div>
         </div>
 
