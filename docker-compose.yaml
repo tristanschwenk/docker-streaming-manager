@@ -97,7 +97,7 @@ services:
       - ./docker-config/jellyfin/config:/config
       - ./docker-config/jellyfin/cache:/cache
       - type: bind
-        source: ../../
+        source: ../
         target: /media
     restart: "unless-stopped"
     # Optional - alternative address used for autodiscovery
