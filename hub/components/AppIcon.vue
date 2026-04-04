@@ -70,6 +70,14 @@ const iconMap: Record<string, string[]> = {
     'M21 21l-4.35-4.35',
     'M11 7l1.2 2.5 2.8.4-2 1.95.47 2.75L11 13.25 8.53 14.6 9 11.85 7 9.9l2.8-.4z'
   ],
+  // Bazarr — subtitles icon
+  bazarr: [
+    'M3 5h18a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z',
+    'M7 15h4',
+    'M15 15h2',
+    'M7 11h2',
+    'M13 11h4'
+  ],
   // Home Assistant — simple house
   homeassistant: [
     'M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z',

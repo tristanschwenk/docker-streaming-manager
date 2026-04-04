@@ -21,7 +21,8 @@ const DEFAULT_MODULES: Module[] = [
   { id: 'prowlarr',    name: 'Prowlarr',     url: 'http://192.168.1.34:9696', active: true,  description: 'Indexer manager', defaultPort: 9696, port: 9696, useCustomUrl: false, customUrl: '' },
   { id: 'transmission',name: 'Transmission', url: 'http://192.168.1.34:9091', active: true,  description: 'BitTorrent client', defaultPort: 9091, port: 9091, useCustomUrl: false, customUrl: '' },
   { id: 'jellystat',   name: 'Jellystat',    url: 'http://192.168.1.34:3001', active: false, description: 'Jellyfin statistics & analytics', defaultPort: 3001, port: 3001, useCustomUrl: false, customUrl: '' },
-  { id: 'seerr',       name: 'Overseerr',    url: 'http://192.168.1.34:5055', active: false, description: 'Media request management', defaultPort: 5055, port: 5055, useCustomUrl: false, customUrl: '' }
+  { id: 'seerr',       name: 'Overseerr',    url: 'http://192.168.1.34:5055', active: false, description: 'Media request management', defaultPort: 5055, port: 5055, useCustomUrl: false, customUrl: '' },
+  { id: 'bazarr',      name: 'Bazarr',       url: 'http://192.168.1.34:6767', active: false, description: 'Subtitle manager', defaultPort: 6767, port: 6767, useCustomUrl: false, customUrl: '' }
 ]
 
 export const useModules = () => {

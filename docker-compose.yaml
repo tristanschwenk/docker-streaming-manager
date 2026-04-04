@@ -22,6 +22,7 @@ services:
       - 8989:8989 # Sonarr
       - 7878:7878 # Radarr
       - 9696:9696 # Prowlarr
+      - 6767:6767 # Bazarr
     restart: always
 
   # --- DOWNLOADER (Derrière le VPN) ---
@@ -166,6 +167,7 @@ services:
   bazarr:
     image: lscr.io/linuxserver/bazarr:latest
     container_name: bazarr
+    network_mode: "container:vpn"
     environment:
       - PUID=1000
       - PGID=1000
@@ -173,6 +175,6 @@ services:
     volumes:
       - ./docker-config/bazarr:/config
       - ./data/media:/data/media # Accès à tes films pour écrire les .srt
-    ports:
-      - 6767:6767
+    depends_on:
+      - vpn
     restart: always
