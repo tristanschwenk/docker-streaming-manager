@@ -68,6 +68,7 @@ services:
     volumes:
       - ./docker-config/radarr:/config
       - ./data:/data
+      - /media/raid/storage/Films:/data/media/old-movies # Ajoute ce lien
     depends_on:
       - vpn
     restart: always
