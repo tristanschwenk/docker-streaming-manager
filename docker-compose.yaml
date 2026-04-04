@@ -179,6 +179,7 @@ services:
     volumes:
       - ./docker-config/bazarr:/config
       - ./data/media:/data/media # Accès à tes films pour écrire les .srt
+      - /media/raid/storage/Film:/data/media/old-movies 
     depends_on:
       - vpn
     restart: always
