@@ -14,7 +14,10 @@ services:
       - OPENVPN_PASSWORD=01KMEC606GGD9Y16CYRRAS7XDQ
       - TZ=Europe/Paris
       - OPENVPN_CUSTOM_CONFIG=/gluetun/client.conf
-      - DOT=off
+      - DNS_ADDRESS=1.1.1.1 # DNS classiques
+      - DOT=off                      # Désactive DNS-over-TLS (indispensable ici)
+      - DNS_KEEP_NAMESERVER=on       # Empêche Gluetun d'écraser le DNS
+      - FIREWALL_OUTBOUND_SUBNETS=192.168.1.0/24
     volumes:
       - ./docker-config/vpn:/gluetun
     ports:
@@ -68,7 +71,7 @@ services:
     volumes:
       - ./docker-config/radarr:/config
       - ./data:/data
-      - /media/raid/storage/Films:/data/media/old-movies # Ajoute ce lien
+      - /media/raid/storage/Film:/data/media/old-movies # Ajoute ce lien
     depends_on:
       - vpn
     restart: always
