@@ -81,6 +81,7 @@ All management interfaces are accessible via your server's local IP (e.g., 192.1
 | **Jellyfin**     | http://<IP>:8096 | Point libraries to /data/media          |
 | **Jellystat**    | http://<IP>:3001 | Get stats about your media              |
 | **Seerr**        | http://<IP>:5055 | Request media from the managers         |
+| **Bazarr**       | http://<IP>:6767 | Subtitles manager                       |
 
 ## 🔧 Internal Communication
 
