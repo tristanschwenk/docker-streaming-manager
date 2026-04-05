@@ -26,8 +26,20 @@ const DEFAULT_MODULES: Module[] = [
 ]
 
 export const useModules = () => {
-  const modules = useStorage<Module[]>('casa-modules', DEFAULT_MODULES)
   const serverAddress = useStorage<string>('casa-server-address', 'http://192.168.1.34')
+  const modules = useStorage<Module[]>('casa-modules', DEFAULT_MODULES)
+
+  // Initialization: ensure all DEFAULT_MODULES are present in current storage.
+  // This allows new features (like Bazarr) to be automatically added to existing users.
+  const missingModules = DEFAULT_MODULES.filter(d => !modules.value.find(m => m.id === d.id))
+  if (missingModules.length > 0) {
+    const toAdd = missingModules.map(m => ({
+      ...m,
+      // Ensure new modules follow the current server address immediately
+      url: m.useCustomUrl ? m.url : `${serverAddress.value}:${m.port}`
+    }))
+    modules.value = [...modules.value, ...toAdd]
+  }
 
   const activeModules = computed(() => modules.value.filter(m => m.active))
 
