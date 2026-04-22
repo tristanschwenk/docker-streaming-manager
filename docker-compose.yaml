@@ -15,8 +15,8 @@ services:
       - TZ=Europe/Paris
       - OPENVPN_CUSTOM_CONFIG=/gluetun/client.conf
       - DNS_ADDRESS=1.1.1.1 # DNS classiques
-      - DOT=off                      # Désactive DNS-over-TLS (indispensable ici)
-      - DNS_KEEP_NAMESERVER=on       # Empêche Gluetun d'écraser le DNS
+      - DOT=off # Désactive DNS-over-TLS (indispensable ici)
+      - DNS_KEEP_NAMESERVER=on # Empêche Gluetun d'écraser le DNS
       - FIREWALL_OUTBOUND_SUBNETS=192.168.1.0/24
     volumes:
       - ./docker-config/vpn:/gluetun
@@ -179,7 +179,8 @@ services:
     volumes:
       - ./docker-config/bazarr:/config
       - ./data/media:/data/media # Accès à tes films pour écrire les .srt
-      - /media/raid/storage/Film:/data/media/old-movies 
+      - /media/raid/storage/Film:/data/media/old-movies
+      - /media/raid/storage/TVshows:/data/media/old-series
     depends_on:
       - vpn
     restart: always
