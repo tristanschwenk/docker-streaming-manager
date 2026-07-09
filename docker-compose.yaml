@@ -73,8 +73,7 @@ services:
       - ./data:/data
       - /media/raid/storage/Film:/data/media/old-movies # Ajoute ce lien
     depends_on:
-      vpn:
-        condition: service_healthy
+      - vpn
     restart: always
 
   sonarr:
@@ -89,8 +88,7 @@ services:
       - ./docker-config/sonarr:/config
       - ./data:/data
     depends_on:
-      vpn:
-        condition: service_healthy
+      - vpn
     restart: always
 
   jellyfin:
