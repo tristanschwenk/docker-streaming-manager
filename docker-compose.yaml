@@ -72,8 +72,11 @@ services:
       - ./docker-config/radarr:/config
       - ./data:/data
       - /media/raid/storage/Film:/data/media/old-movies # Ajoute ce lien
+    dns: 
+      - 1.1.1.1
     depends_on:
-      - vpn
+      vpn:
+        condition: service_healthy
     restart: always
 
   sonarr:
@@ -87,8 +90,11 @@ services:
     volumes:
       - ./docker-config/sonarr:/config
       - ./data:/data
+    dns:
+      - 1.1.1.1
     depends_on:
-      - vpn
+      vpn:
+        condition: service_healthy
     restart: always
 
   jellyfin:
