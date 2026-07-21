@@ -164,8 +164,26 @@ services:
   hub:
     build: ./hub
     container_name: casastreaming
+    environment:
+      - BETTER_AUTH_SECRET=dlkfjgblksjnclkjfdgndflkjgndflkjfnlkzgnerlkjgndkjn
+      - BETTER_AUTH_URL=http://localhost
+      - DATABASE_PATH=/app/db/auth.db
+    volumes:
+      - ./docker-config/hub/db:/app/db
+    restart: always
+
+  # --- PROXY ---
+  caddy:
+    image: caddy:2-alpine
+    container_name: proxy
     ports:
-      - 3000:80
+      - 80:80
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - hub
     restart: always
 
   bazarr:
@@ -184,3 +202,8 @@ services:
     depends_on:
       - vpn
     restart: always
+
+volumes:
+  caddy_data:
+  caddy_config:
+

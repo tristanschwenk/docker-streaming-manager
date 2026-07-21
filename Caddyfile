@@ -1,0 +1,88 @@
+# Caddyfile
+:80 {
+    # --- Public Endpoints (Bypass Auth) ---
+    @public {
+        path /api/auth/* /login /register /_nuxt* /favicon.ico /__vite_ping
+    }
+    handle @public {
+        reverse_proxy hub:3000
+    }
+
+    # --- Protected Nuxt Hub Pages ---
+    @protected_hub {
+        not path /api/auth/* /login /register /_nuxt* /favicon.ico /__vite_ping /radarr* /sonarr* /transmission* /prowlarr* /bazarr* /seerr* /jellystat*
+    }
+    handle @protected_hub {
+        forward_auth hub:3000 {
+            uri /api/auth/verify
+            copy_headers X-Forwarded-User
+        }
+        reverse_proxy hub:3000
+    }
+
+    # --- Protected Services ---
+
+    # Radarr
+    handle /radarr* {
+        forward_auth hub:3000 {
+            uri /api/auth/verify
+            copy_headers X-Forwarded-User
+        }
+        reverse_proxy vpn:7878
+    }
+
+    # Sonarr
+    handle /sonarr* {
+        forward_auth hub:3000 {
+            uri /api/auth/verify
+            copy_headers X-Forwarded-User
+        }
+        reverse_proxy vpn:8989
+    }
+
+    # Transmission (Inject Basic Auth: admin/admin placeholder)
+    handle /transmission* {
+        forward_auth hub:3000 {
+            uri /api/auth/verify
+            copy_headers X-Forwarded-User
+        }
+        header_up Authorization "Basic YWRtaW46YWRtaW4="
+        reverse_proxy vpn:9091
+    }
+
+    # Prowlarr
+    handle /prowlarr* {
+        forward_auth hub:3000 {
+            uri /api/auth/verify
+            copy_headers X-Forwarded-User
+        }
+        reverse_proxy vpn:9696
+    }
+
+    # Bazarr
+    handle /bazarr* {
+        forward_auth hub:3000 {
+            uri /api/auth/verify
+            copy_headers X-Forwarded-User
+        }
+        reverse_proxy vpn:6767
+    }
+
+    # Overseerr / Seerr
+    handle /seerr* {
+        forward_auth hub:3000 {
+            uri /api/auth/verify
+            copy_headers X-Forwarded-User
+        }
+        reverse_proxy seerr:5055
+    }
+
+    # Jellystat
+    handle /jellystat* {
+        forward_auth hub:3000 {
+            uri /api/auth/verify
+            copy_headers X-Forwarded-User
+        }
+        reverse_proxy jellystat:3000
+    }
+}
