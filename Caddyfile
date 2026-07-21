@@ -46,8 +46,9 @@
             uri /api/auth/verify
             copy_headers X-Forwarded-User
         }
-        header_up Authorization "Basic YWRtaW46YWRtaW4="
-        reverse_proxy vpn:9091
+        reverse_proxy vpn:9091 {
+            header_up Authorization "Basic YWRtaW46YWRtaW4="
+        }
     }
 
     # Prowlarr
