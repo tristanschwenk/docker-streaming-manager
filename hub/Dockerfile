@@ -3,21 +3,29 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
+# Install compilation tools for native node modules (like better-sqlite3)
+RUN apk add --no-cache python3 make g++
+
 COPY package*.json ./
 RUN npm install
 
 COPY . .
-RUN npm run generate
+RUN npm run build
 
-# Stage 2: Serve
-FROM nginx:alpine
+# Stage 2: Run
+FROM node:20-alpine
 
-# Copy generate output to nginx public directory
-COPY --from=builder /app/.output/public /usr/share/nginx/html
+WORKDIR /app
 
-# Copy custom nginx config
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy production artifacts
+COPY --from=builder /app/.output ./.output
 
-EXPOSE 80
+# Make sure SQLite db directory exists inside the container
+RUN mkdir -p /app/db
 
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 3000
+ENV PORT=3000
+ENV HOST=0.0.0.0
+ENV NODE_ENV=production
+
+CMD ["node", ".output/server/index.mjs"]

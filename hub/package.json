@@ -10,9 +10,12 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "better-auth": "^1.1.0",
+    "better-sqlite3": "^9.4.0",
     "nuxt": "latest"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.9",
     "@vite-pwa/nuxt": "latest",
     "@vueuse/nuxt": "latest"
   },
