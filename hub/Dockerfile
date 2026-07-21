@@ -17,8 +17,10 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy production artifacts
+# Copy production artifacts and node_modules for native dependencies (better-sqlite3)
 COPY --from=builder /app/.output ./.output
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package*.json ./
 
 # Make sure SQLite db directory exists inside the container
 RUN mkdir -p /app/db
